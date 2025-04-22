@@ -31,11 +31,12 @@ _replace_repo_user:
   fi
 
 # setup kind cluster
-setup_kind cluster_name='desktop':
+setup_kind cluster_name='control-plane':
   #!/usr/bin/env bash
   set -euo pipefail
 
-  echo "Getting kubeconfig from kind cluster - {{cluster_name}}"
+  echo "Creating kind cluster - {{cluster_name}}"
+  envsubst < kind-config.yaml | kind create cluster --config - --wait 3m
   kind get kubeconfig --name {{cluster_name}}
   kubectl config use-context kind-{{cluster_name}}
 
